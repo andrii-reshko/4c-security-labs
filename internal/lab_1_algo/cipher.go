@@ -1,5 +1,7 @@
 package lab_1_algo
 
+import "4c-security-labs/internal/shared"
+
 // Algorithm identifies one of the four mandatory ciphers (section 6.1).
 type Algorithm string
 
@@ -47,10 +49,8 @@ func (a Algorithm) Label() string {
 // Result is what every cipher returns from Encrypt. Meta carries algorithm
 // specific side information that decryption needs back (e.g. the number of
 // padding characters appended by the columnar cipher, section 6.2 table).
-type Result struct {
-	Text string
-	Meta map[string]string
-}
+// The implementation is shared with internal/lab_2_algo via internal/shared.
+type Result = shared.Result
 
 // Cipher is the shared, interface-only contract between the cryptographic
 // core and any delivery mechanism (TUI, CLI flags, tests). It intentionally

@@ -1,5 +1,7 @@
 package lab_2_algo
 
+import "4c-security-labs/internal/shared"
+
 // Algorithm identifies one of the three mandatory modes (section 6.1).
 type Algorithm string
 
@@ -30,10 +32,10 @@ func (a Algorithm) Label() string {
 	}
 }
 
-// Result is what every cipher returns from Encrypt.
-type Result struct {
-	Text string
-}
+// Result is what every cipher returns from Encrypt. The implementation is
+// shared with internal/lab_1_algo via internal/shared; lab 2's ciphers
+// never populate Meta.
+type Result = shared.Result
 
 // Cipher is the shared, interface-only contract between the cryptographic
 // core and any delivery mechanism (CLI, tests). lang is explicit on every

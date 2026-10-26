@@ -8,6 +8,7 @@ import (
 	"testing"
 
 	algo "4c-security-labs/internal/lab_2_algo"
+	"4c-security-labs/internal/shared"
 )
 
 // --- Control vectors (section 7) -------------------------------------------
@@ -219,7 +220,7 @@ func TestReversibilityAllModes(t *testing.T) {
 	t.Run("polybius_coordinates_ua", func(t *testing.T) {
 		c := algo.NewPolybiusCoordinatesCipher()
 		for _, msg := range uaMessages {
-			prepared := algo.Prepare(msg)
+			prepared := shared.Prepare(msg)
 			res, err := c.Encrypt(algo.LanguageUkrainian, "БЕЗПЕКА", msg)
 			if err != nil {
 				t.Fatalf("Encrypt(%q): %v", msg, err)
@@ -237,7 +238,7 @@ func TestReversibilityAllModes(t *testing.T) {
 	t.Run("polybius_row_shift_ua", func(t *testing.T) {
 		c := algo.NewPolybiusRowShiftCipher()
 		for _, msg := range uaMessages {
-			prepared := algo.Prepare(msg)
+			prepared := shared.Prepare(msg)
 			res, err := c.Encrypt(algo.LanguageUkrainian, "БЕЗПЕКА", msg)
 			if err != nil {
 				t.Fatalf("Encrypt(%q): %v", msg, err)
@@ -255,7 +256,7 @@ func TestReversibilityAllModes(t *testing.T) {
 	t.Run("gronsfeld_ua", func(t *testing.T) {
 		c := algo.NewGronsfeldCipher()
 		for _, msg := range uaMessages {
-			prepared := algo.Prepare(msg)
+			prepared := shared.Prepare(msg)
 			res, err := c.Encrypt(algo.LanguageUkrainian, "31415", msg)
 			if err != nil {
 				t.Fatalf("Encrypt(%q): %v", msg, err)
@@ -285,7 +286,7 @@ func TestReversibilityAllModes(t *testing.T) {
 	t.Run("gronsfeld_lat", func(t *testing.T) {
 		c := algo.NewGronsfeldCipher()
 		for _, msg := range latMessages {
-			prepared := algo.Prepare(msg)
+			prepared := shared.Prepare(msg)
 			res, err := c.Encrypt(algo.LanguageLatin, "2718", msg)
 			if err != nil {
 				t.Fatalf("Encrypt(%q): %v", msg, err)
@@ -303,7 +304,7 @@ func TestReversibilityAllModes(t *testing.T) {
 	t.Run("polybius_coordinates_lat", func(t *testing.T) {
 		c := algo.NewPolybiusCoordinatesCipher()
 		for _, msg := range latMessages {
-			prepared := algo.Prepare(msg)
+			prepared := shared.Prepare(msg)
 			res, err := c.Encrypt(algo.LanguageLatin, "SECURITY", msg)
 			if err != nil {
 				t.Fatalf("Encrypt(%q): %v", msg, err)
@@ -481,8 +482,8 @@ func TestFormattingIsPreservedRowShift(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Decrypt: %v", err)
 	}
-	if plain != algo.Prepare(msg) {
-		t.Fatalf("round-trip = %q, want %q", plain, algo.Prepare(msg))
+	if plain != shared.Prepare(msg) {
+		t.Fatalf("round-trip = %q, want %q", plain, shared.Prepare(msg))
 	}
 }
 
@@ -497,7 +498,7 @@ func TestFormattingIsPreservedGronsfeld(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Decrypt: %v", err)
 	}
-	if plain != algo.Prepare(msg) {
-		t.Fatalf("round-trip = %q, want %q", plain, algo.Prepare(msg))
+	if plain != shared.Prepare(msg) {
+		t.Fatalf("round-trip = %q, want %q", plain, shared.Prepare(msg))
 	}
 }

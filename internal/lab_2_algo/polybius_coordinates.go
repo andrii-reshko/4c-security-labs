@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+
+	"4c-security-labs/internal/shared"
 )
 
 // PolybiusCoordinatesCipher implements the coordinate mode from section 4.4:
@@ -33,7 +35,7 @@ func (c *PolybiusCoordinatesCipher) Encrypt(lang Language, key, plaintext string
 	if err != nil {
 		return Result{}, err
 	}
-	prepared := Prepare(plaintext)
+	prepared := shared.Prepare(plaintext)
 	tokens := make([]string, 0, len(prepared))
 	for _, r := range prepared {
 		coord, ok := sq.Coordinates(r)

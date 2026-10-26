@@ -1,6 +1,10 @@
 package lab_2_algo
 
-import "fmt"
+import (
+	"fmt"
+
+	"4c-security-labs/internal/shared"
+)
 
 // Language selects which base character set an algorithm run against
 // (section 4.1, "Узгоджені набори символів"). It must always be passed
@@ -13,11 +17,13 @@ const (
 	LanguageLatin     Language = "lat"
 )
 
-// UkrainianLetters is the 33-letter Ukrainian alphabet (section 4.1).
-const UkrainianLetters = "АБВГҐДЕЄЖЗИІЇЙКЛМНОПРСТУФХЦЧШЩЬЮЯ"
+// UkrainianLetters is the 33-letter Ukrainian alphabet (section 4.1). The
+// literal lives once in internal/shared, shared with internal/lab_1_algo.
+const UkrainianLetters = shared.UkrainianLetters
 
-// LatinLetters is the 26-letter Latin alphabet (section 4.1).
-const LatinLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+// LatinLetters is the 26-letter Latin alphabet (section 4.1). The literal
+// lives once in internal/shared.
+const LatinLetters = shared.LatinLetters
 
 // ukrainianSquareDigits and latinSquareDigits are appended after the
 // letters, in ascending order, to build the 36-symbol square base set
@@ -27,63 +33,30 @@ const latinSquareDigits = "0123456789"
 
 // Alphabet is an ordered, indexed set of runes. It backs both the
 // letters-only alphabet the Gronsfeld cipher advances over and the
-// 36-symbol base set the Polybius square is built from.
-type Alphabet struct {
-	runes []rune
-	index map[rune]int
-}
+// 36-symbol base set the Polybius square is built from. The implementation
+// is shared with internal/lab_1_algo via internal/shared.
+type Alphabet = shared.Alphabet
 
-// NewAlphabet builds an Alphabet from a string of distinct symbols,
-// assigning each one its position (0-based) as index.
-func NewAlphabet(symbols string) *Alphabet {
-	runes := []rune(symbols)
-	index := make(map[rune]int, len(runes))
-	for i, r := range runes {
-		index[r] = i
-	}
-	return &Alphabet{runes: runes, index: index}
-}
-
-// Size returns m, the power of the alphabet.
-func (a *Alphabet) Size() int {
-	return len(a.runes)
-}
-
-// IndexOf returns the position of r in the alphabet and true if r belongs
-// to it.
-func (a *Alphabet) IndexOf(r rune) (int, bool) {
-	i, ok := a.index[r]
-	return i, ok
-}
-
-// RuneAt returns the symbol at position i (0 <= i < Size()).
-func (a *Alphabet) RuneAt(i int) rune {
-	return a.runes[i]
-}
-
-// Contains reports whether r is one of the alphabet's symbols.
-func (a *Alphabet) Contains(r rune) bool {
-	_, ok := a.index[r]
-	return ok
-}
-
-// Runes returns a copy of the alphabet's symbols in order; callers may
-// freely mutate the result without affecting the Alphabet.
-func (a *Alphabet) Runes() []rune {
-	out := make([]rune, len(a.runes))
-	copy(out, a.runes)
-	return out
-}
+// ukrainianSquareBase and latinSquareBase are built once at package init,
+// not on every BuildSquare call — the symbol set is fixed, so there is
+// nothing to recompute (section 10, "Продуктивність: таблиці пошуку
+// готуються один раз").
+var (
+	ukrainianSquareBase = shared.NewAlphabet(UkrainianLetters + ukrainianSquareDigits)
+	latinSquareBase     = shared.NewAlphabet(LatinLetters + latinSquareDigits)
+)
 
 // Letters returns the base, letters-only alphabet for lang, used by the
 // Gronsfeld cipher (section 4.7: "Базові алфавіти для Гронсфельда містять
-// лише літери").
+// лише літери"). For LanguageUkrainian this is the exact same *Alphabet
+// instance as internal/shared.UkrainianAlphabet (and lab_1_algo's
+// DefaultAlphabet) — not a fresh copy built per call.
 func Letters(lang Language) (*Alphabet, error) {
 	switch lang {
 	case LanguageUkrainian:
-		return NewAlphabet(UkrainianLetters), nil
+		return shared.UkrainianAlphabet, nil
 	case LanguageLatin:
-		return NewAlphabet(LatinLetters), nil
+		return shared.LatinAlphabet, nil
 	default:
 		return nil, fmt.Errorf("%w: %q", ErrUnknownLanguage, lang)
 	}
@@ -95,9 +68,9 @@ func Letters(lang Language) (*Alphabet, error) {
 func SquareBase(lang Language) (*Alphabet, error) {
 	switch lang {
 	case LanguageUkrainian:
-		return NewAlphabet(UkrainianLetters + ukrainianSquareDigits), nil
+		return ukrainianSquareBase, nil
 	case LanguageLatin:
-		return NewAlphabet(LatinLetters + latinSquareDigits), nil
+		return latinSquareBase, nil
 	default:
 		return nil, fmt.Errorf("%w: %q", ErrUnknownLanguage, lang)
 	}

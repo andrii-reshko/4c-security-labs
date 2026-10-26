@@ -3,6 +3,8 @@ package lab_2_algo
 import (
 	"fmt"
 	"strings"
+
+	"4c-security-labs/internal/shared"
 )
 
 // SquareDim is the side of the key square (section 4.1: "таблицю 6 на 6").
@@ -34,9 +36,9 @@ func BuildSquare(lang Language, keyword string) (*Square, error) {
 		return nil, err
 	}
 
-	prepared := Prepare(keyword)
+	prepared := shared.Prepare(keyword)
 	if prepared == "" {
-		return nil, ErrEmptyKey
+		return nil, shared.ErrEmptyKey
 	}
 
 	seen := make(map[rune]bool, base.Size())

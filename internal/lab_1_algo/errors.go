@@ -4,9 +4,10 @@ import "errors"
 
 // Sentinel errors returned by key validation and by the ciphers themselves.
 // They are wrapped with extra context via fmt.Errorf("%w: ...") where useful,
-// so callers can still match on them with errors.Is.
+// so callers can still match on them with errors.Is. ErrEmptyKey lives in
+// internal/shared — see that package's errors.go — since the message is
+// identical across every cipher in both labs.
 var (
-	ErrEmptyKey          = errors.New("ключ не може бути порожнім")
 	ErrUnsupportedRune   = errors.New("символ не підтримується базовим алфавітом")
 	ErrDuplicateLetter   = errors.New("ключ містить літеру, що повторюється у таблиці підстановки")
 	ErrTableWrongLength  = errors.New("таблиця підстановки має хибну довжину")

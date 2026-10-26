@@ -1,6 +1,10 @@
 package lab_1_algo
 
-import "fmt"
+import (
+	"fmt"
+
+	"4c-security-labs/internal/shared"
+)
 
 // SubstitutionCipher implements the simple monoalphabetic substitution from
 // section 4.2. The key is a keyword W; the substitution table B is derived
@@ -30,7 +34,7 @@ func (c *SubstitutionCipher) DefaultKey() string {
 func BuildTable(keyword string) ([]rune, error) {
 	prepared := PrepareWithMode(keyword, PrepLettersOnly)
 	if prepared == "" {
-		return nil, ErrEmptyKey
+		return nil, shared.ErrEmptyKey
 	}
 
 	seen := make(map[rune]bool, DefaultAlphabet.Size())
@@ -110,7 +114,7 @@ func (c *SubstitutionCipher) keyTable(key string) ([]rune, error) {
 // table (indexed the same way as A) and leaves every other rune untouched,
 // as required by the "Сторонні символи" row of section 5.
 func transformWithTable(text string, table []rune) string {
-	prepared := Prepare(text)
+	prepared := shared.Prepare(text)
 	out := make([]rune, 0, len(prepared))
 	for _, r := range prepared {
 		if idx, ok := DefaultAlphabet.IndexOf(r); ok {

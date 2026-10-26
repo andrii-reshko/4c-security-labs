@@ -11,6 +11,7 @@ import (
 
 	lab_1 "4c-security-labs/internal/lab_1"
 	algo "4c-security-labs/internal/lab_1_algo"
+	"4c-security-labs/internal/shared"
 )
 
 // --- Control vectors (section 7) -------------------------------------------
@@ -135,7 +136,7 @@ func TestReversibilityAllAlgorithms(t *testing.T) {
 	t.Run("substitution", func(t *testing.T) {
 		c := algo.NewSubstitutionCipher("")
 		for _, msg := range messages {
-			prepared := algo.Prepare(msg)
+			prepared := shared.Prepare(msg)
 			res, err := c.Encrypt("КРИПТОГРАФІЯ", msg)
 			if err != nil {
 				t.Fatalf("Encrypt(%q): %v", msg, err)
@@ -153,7 +154,7 @@ func TestReversibilityAllAlgorithms(t *testing.T) {
 	t.Run("vigenere", func(t *testing.T) {
 		c := algo.NewVigenereCipher("")
 		for _, msg := range messages {
-			prepared := algo.Prepare(msg)
+			prepared := shared.Prepare(msg)
 			res, err := c.Encrypt("ТАЄМНИЦЯ", msg)
 			if err != nil {
 				t.Fatalf("Encrypt(%q): %v", msg, err)
@@ -171,7 +172,7 @@ func TestReversibilityAllAlgorithms(t *testing.T) {
 	t.Run("block_permutation_preserve", func(t *testing.T) {
 		c := algo.NewBlockPermutationCipher("")
 		for _, msg := range messages {
-			prepared := algo.Prepare(msg)
+			prepared := shared.Prepare(msg)
 			res, err := c.Encrypt("4 1 3 2 6 5", msg)
 			if err != nil {
 				t.Fatalf("Encrypt(%q): %v", msg, err)
@@ -189,7 +190,7 @@ func TestReversibilityAllAlgorithms(t *testing.T) {
 	t.Run("columnar", func(t *testing.T) {
 		c := algo.NewColumnarCipher("")
 		for _, msg := range messages {
-			prepared := algo.Prepare(msg)
+			prepared := shared.Prepare(msg)
 			res, err := c.Encrypt("5 3 1 4 2", msg)
 			if err != nil {
 				t.Fatalf("Encrypt(%q): %v", msg, err)
@@ -232,8 +233,8 @@ func TestUkrainianSpecialLetters(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Decrypt: %v", err)
 	}
-	if plain != algo.Prepare(msg) {
-		t.Fatalf("round-trip = %q, want %q", plain, algo.Prepare(msg))
+	if plain != shared.Prepare(msg) {
+		t.Fatalf("round-trip = %q, want %q", plain, shared.Prepare(msg))
 	}
 }
 
@@ -260,8 +261,8 @@ func TestBoundariesBlockPermutation(t *testing.T) {
 		if err != nil {
 			t.Fatalf("Decrypt(%q): %v", text, err)
 		}
-		if plain != algo.Prepare(text) {
-			t.Fatalf("round-trip(%q) = %q, want %q", text, plain, algo.Prepare(text))
+		if plain != shared.Prepare(text) {
+			t.Fatalf("round-trip(%q) = %q, want %q", text, plain, shared.Prepare(text))
 		}
 	}
 }
@@ -286,8 +287,8 @@ func TestBoundariesColumnar(t *testing.T) {
 		if err != nil {
 			t.Fatalf("Decrypt(%q): %v", text, err)
 		}
-		if plain != algo.Prepare(text) {
-			t.Fatalf("round-trip(%q) = %q, want %q", text, plain, algo.Prepare(text))
+		if plain != shared.Prepare(text) {
+			t.Fatalf("round-trip(%q) = %q, want %q", text, plain, shared.Prepare(text))
 		}
 	}
 }
@@ -305,8 +306,8 @@ func TestFormattingIsPreserved(t *testing.T) {
 	if err != nil {
 		t.Fatalf("Decrypt: %v", err)
 	}
-	if plain != algo.Prepare(msg) {
-		t.Fatalf("round-trip = %q, want %q", plain, algo.Prepare(msg))
+	if plain != shared.Prepare(msg) {
+		t.Fatalf("round-trip = %q, want %q", plain, shared.Prepare(msg))
 	}
 }
 

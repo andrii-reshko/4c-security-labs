@@ -1,6 +1,10 @@
 package lab_2_algo
 
-import "fmt"
+import (
+	"fmt"
+
+	"4c-security-labs/internal/shared"
+)
 
 // GronsfeldCipher implements the polyalphabetic substitution with a digit
 // key from section 4.7. The key is kept as a string of digits, not an
@@ -29,7 +33,7 @@ func (c *GronsfeldCipher) ValidateKey(lang Language, key string) error {
 // empty, digits only, and not composed entirely of zeros.
 func digitsKey(key string) ([]int, error) {
 	if key == "" {
-		return nil, ErrEmptyKey
+		return nil, shared.ErrEmptyKey
 	}
 	digits := make([]int, 0, len(key))
 	hasNonZero := false
@@ -59,7 +63,7 @@ func (c *GronsfeldCipher) Encrypt(lang Language, key, plaintext string) (Result,
 		return Result{}, err
 	}
 	m := alphabet.Size()
-	prepared := Prepare(plaintext)
+	prepared := shared.Prepare(plaintext)
 	out := make([]rune, 0, len(prepared))
 	j := 0
 	for _, r := range prepared {
@@ -86,7 +90,7 @@ func (c *GronsfeldCipher) Decrypt(lang Language, key string, in Result) (string,
 		return "", err
 	}
 	m := alphabet.Size()
-	prepared := Prepare(in.Text)
+	prepared := shared.Prepare(in.Text)
 	out := make([]rune, 0, len(prepared))
 	j := 0
 	for _, r := range prepared {

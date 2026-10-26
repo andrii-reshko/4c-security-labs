@@ -1,6 +1,10 @@
 package lab_1_algo
 
-import "fmt"
+import (
+	"fmt"
+
+	"4c-security-labs/internal/shared"
+)
 
 // VigenereCipher implements the periodic polyalphabetic substitution from
 // section 4.4. Non-alphabet characters are preserved and do not advance the
@@ -32,9 +36,9 @@ func (c *VigenereCipher) ValidateKey(key string) error {
 }
 
 func (c *VigenereCipher) keyIndices(key string) ([]int, error) {
-	prepared := Prepare(key)
+	prepared := shared.Prepare(key)
 	if prepared == "" {
-		return nil, ErrEmptyKey
+		return nil, shared.ErrEmptyKey
 	}
 	indices := make([]int, 0, len(prepared))
 	for _, r := range prepared {
@@ -53,7 +57,7 @@ func (c *VigenereCipher) Encrypt(key, plaintext string) (Result, error) {
 		return Result{}, err
 	}
 	m := DefaultAlphabet.Size()
-	prepared := Prepare(plaintext)
+	prepared := shared.Prepare(plaintext)
 	out := make([]rune, 0, len(prepared))
 	pos := 0
 	for _, r := range prepared {
@@ -76,7 +80,7 @@ func (c *VigenereCipher) Decrypt(key string, in Result) (string, error) {
 		return "", err
 	}
 	m := DefaultAlphabet.Size()
-	prepared := Prepare(in.Text)
+	prepared := shared.Prepare(in.Text)
 	out := make([]rune, 0, len(prepared))
 	pos := 0
 	for _, r := range prepared {

@@ -1,5 +1,7 @@
 package lab_2_algo
 
+import "4c-security-labs/internal/shared"
+
 // PolybiusRowShiftCipher implements the "row shift" mode documented
 // separately from the coordinate mode in section 4.2/4.5: a symbol is
 // replaced by the symbol from the next row of the same column (cyclic
@@ -28,7 +30,7 @@ func (c *PolybiusRowShiftCipher) Encrypt(lang Language, key, plaintext string) (
 	if err != nil {
 		return Result{}, err
 	}
-	prepared := Prepare(plaintext)
+	prepared := shared.Prepare(plaintext)
 	out := make([]rune, 0, len(prepared))
 	for _, r := range prepared {
 		if shifted, ok := sq.RowShift(r); ok {
@@ -45,7 +47,7 @@ func (c *PolybiusRowShiftCipher) Decrypt(lang Language, key string, in Result) (
 	if err != nil {
 		return "", err
 	}
-	prepared := Prepare(in.Text)
+	prepared := shared.Prepare(in.Text)
 	out := make([]rune, 0, len(prepared))
 	for _, r := range prepared {
 		if shifted, ok := sq.RowUnshift(r); ok {

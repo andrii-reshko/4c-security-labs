@@ -1,8 +1,10 @@
 package lab_1_algo
 
+import "4c-security-labs/internal/shared"
+
 func LetterFrequencies(text string) map[rune]int {
 	counts := make(map[rune]int, DefaultAlphabet.Size())
-	for _, r := range Prepare(text) {
+	for _, r := range shared.Prepare(text) {
 		if DefaultAlphabet.Contains(r) {
 			counts[r]++
 		}

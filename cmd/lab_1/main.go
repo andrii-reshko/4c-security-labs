@@ -16,13 +16,11 @@ import (
 	lab_1 "4c-security-labs/internal/lab_1"
 	algo "4c-security-labs/internal/lab_1_algo"
 	lab_1ext "4c-security-labs/internal/lab_1_ext"
+	"4c-security-labs/internal/shared"
 )
 
 func main() {
-	if err := run(os.Args[1:]); err != nil {
-		fmt.Fprintln(os.Stderr, "помилка:", err)
-		os.Exit(1)
-	}
+	shared.Main(run)
 }
 
 func run(args []string) error {
@@ -55,7 +53,7 @@ func run(args []string) error {
 		if algorithm != algo.AlgorithmVigenere {
 			return errors.New("-estimate-key-length застосовується лише разом з -a=2 (шифр Віженера)")
 		}
-		ciphertext, err := resolveText(*inFile, fs.Args())
+		ciphertext, err := shared.ResolveText(*inFile, fs.Args(), lab_1ext.ReadUTF8File)
 		if err != nil {
 			return err
 		}
@@ -66,7 +64,7 @@ func run(args []string) error {
 		return errors.New("потрібно вказати рівно одну з опцій -e або -d")
 	}
 
-	text, err := resolveText(*inFile, fs.Args())
+	text, err := shared.ResolveText(*inFile, fs.Args(), lab_1ext.ReadUTF8File)
 	if err != nil {
 		return err
 	}
@@ -171,16 +169,6 @@ func algorithmFromNumber(n int) (algo.Algorithm, error) {
 		return "", fmt.Errorf("-a має бути від 1 до %d", len(algo.Algorithms))
 	}
 	return algo.Algorithms[n-1], nil
-}
-
-func resolveText(inFile string, positional []string) (string, error) {
-	if inFile != "" {
-		return lab_1ext.ReadUTF8File(inFile)
-	}
-	if len(positional) == 0 {
-		return "", errors.New("потрібно передати текст аргументом або вказати -i файл")
-	}
-	return strings.Join(positional, " "), nil
 }
 
 func printUsage(fs *flag.FlagSet) {

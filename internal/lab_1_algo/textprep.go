@@ -3,7 +3,7 @@ package lab_1_algo
 import (
 	"strings"
 
-	"golang.org/x/text/unicode/norm"
+	"4c-security-labs/internal/shared"
 )
 
 type PrepMode int
@@ -15,13 +15,8 @@ const (
 	PrepLettersOnly
 )
 
-func Prepare(text string) string {
-	normalized := norm.NFC.String(text)
-	return strings.ToUpper(normalized)
-}
-
 func PrepareWithMode(text string, mode PrepMode) string {
-	prepared := Prepare(text)
+	prepared := shared.Prepare(text)
 	if mode == PrepPreserve {
 		return prepared
 	}

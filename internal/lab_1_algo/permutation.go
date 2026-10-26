@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"strconv"
 	"strings"
+
+	"4c-security-labs/internal/shared"
 )
 
 // parsePermutation reads a permutation key such as "3 2 5 1 4" or "3,2,5,1,4"
@@ -36,7 +38,7 @@ func parsePermutation(key string) ([]int, error) {
 	}
 
 	if len(numbers) == 0 {
-		return nil, ErrEmptyKey
+		return nil, shared.ErrEmptyKey
 	}
 
 	n := len(numbers)

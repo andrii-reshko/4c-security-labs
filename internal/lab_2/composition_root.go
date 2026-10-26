@@ -1,10 +1,13 @@
 package lab_2
 
-import algo "4c-security-labs/internal/lab_2_algo"
+import (
+	algo "4c-security-labs/internal/lab_2_algo"
+	"4c-security-labs/internal/shared"
+)
 
-type Container struct {
-	Service *CipherService
-}
+// Container holds this lab's CipherService; see internal/shared.Container
+// for why the wrapper itself is shared across labs.
+type Container = shared.Container[*CipherService]
 
 func NewContainer() *Container {
 	service := NewCipherService(
@@ -12,7 +15,5 @@ func NewContainer() *Container {
 		algo.NewPolybiusRowShiftCipher(),
 		algo.NewGronsfeldCipher(),
 	)
-	return &Container{
-		Service: service,
-	}
+	return shared.NewContainer(service)
 }

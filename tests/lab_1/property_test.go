@@ -7,6 +7,7 @@ import (
 	"testing"
 
 	algo "4c-security-labs/internal/lab_1_algo"
+	"4c-security-labs/internal/shared"
 )
 
 // generativeIterations is how many random (key, message) pairs each
@@ -77,7 +78,7 @@ func TestPropertySubstitutionRoundTrip(t *testing.T) {
 		if err != nil {
 			t.Fatalf("iteration %d: Decrypt: %v", i, err)
 		}
-		if want := algo.Prepare(msg); plain != want {
+		if want := shared.Prepare(msg); plain != want {
 			t.Fatalf("iteration %d: round-trip(key=%q, msg=%q) = %q, want %q", i, key, msg, plain, want)
 		}
 	}
@@ -101,7 +102,7 @@ func TestPropertyVigenereRoundTrip(t *testing.T) {
 		if err != nil {
 			t.Fatalf("iteration %d: Decrypt: %v", i, err)
 		}
-		if want := algo.Prepare(msg); plain != want {
+		if want := shared.Prepare(msg); plain != want {
 			t.Fatalf("iteration %d: round-trip(key=%q, msg=%q) = %q, want %q", i, key, msg, plain, want)
 		}
 	}
@@ -126,7 +127,7 @@ func TestPropertyBlockPermutationRoundTrip(t *testing.T) {
 		if err != nil {
 			t.Fatalf("iteration %d: Decrypt: %v", i, err)
 		}
-		if want := algo.Prepare(msg); plain != want {
+		if want := shared.Prepare(msg); plain != want {
 			t.Fatalf("iteration %d: round-trip(key=%q, msg=%q) = %q, want %q", i, key, msg, plain, want)
 		}
 	}
@@ -151,7 +152,7 @@ func TestPropertyColumnarRoundTrip(t *testing.T) {
 		if err != nil {
 			t.Fatalf("iteration %d: Decrypt: %v", i, err)
 		}
-		if want := algo.Prepare(msg); plain != want {
+		if want := shared.Prepare(msg); plain != want {
 			t.Fatalf("iteration %d: round-trip(key=%q, msg=%q) = %q, want %q", i, key, msg, plain, want)
 		}
 	}

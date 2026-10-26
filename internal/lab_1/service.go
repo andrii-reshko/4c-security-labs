@@ -4,6 +4,7 @@ import (
 	"fmt"
 
 	algo "4c-security-labs/internal/lab_1_algo"
+	"4c-security-labs/internal/shared"
 )
 
 // CipherService is the single façade the delivery layer (CLI, tests) talks
@@ -27,7 +28,7 @@ func NewCipherService(ciphers ...algo.Cipher) *CipherService {
 func (s *CipherService) Get(a algo.Algorithm) (algo.Cipher, error) {
 	c, ok := s.ciphers[a]
 	if !ok {
-		return nil, fmt.Errorf("%w: %s", ErrUnknownAlgorithm, a)
+		return nil, fmt.Errorf("%w: %s", shared.ErrUnknownAlgorithm, a)
 	}
 	return c, nil
 }
